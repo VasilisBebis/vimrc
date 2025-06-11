@@ -19,6 +19,7 @@ set      guioptions-=T
 set      guioptions-=r
 set      encoding=utf-8
 set      updatetime=300
+set      backspace=indent,eol,start
 
 call plug#begin()
 Plug 'neoclide/coc.nvim', {'branch': 'release'}
