@@ -1,8 +1,16 @@
-filetype on
+if exists('g:loaded_vimrc') || &compatible
+  finish
+else
+  let g:loaded_vimrc = 'yes'
+endif
+
+filetype on 
 filetype plugin on
-filetype plugin indent on
+filetype indent on
 syntax   on
 syntax   enable
+set      autoindent
+set      nocompatible
 set      number
 set      tabstop=2
 set      shiftwidth=2
@@ -20,14 +28,103 @@ set      guioptions-=r
 set      encoding=utf-8
 set      updatetime=300
 set      backspace=indent,eol,start
+set      hidden
+set      complete-=i
+set      nrformats-=octal
+set      ttimeout
+set      ttimeoutlen=100
+set      incsearch
+set      laststatus=2
+set      display+=lastline
+set      autoread
+set      cursorline
+set      cursorlineopt=number
+set      wrap linebreak
+set      showbreak=" "
+set      wildmode=longest,full
+set      noerrorbells
+set      modeline
+set      foldmethod=indent
+set      foldnestmax=3
+set      nofoldenable
+set      mouse=a
+set      shortmess+=A
+set      hlsearch
+set      iskeyword+=-
+set      wildignore+=*.o,*.out,*.obj,.git,*.rbc,*.rbo,*.class,.svn,*.gem
+set      wildignore+=*.zip,*.tar.gz,*.tar.bz2,*.rar,*.tar.xz
+set      wildignore+=*/vendor/gems/*,*/vendor/cache/*,*/.bundle/*,*/.sass-cache/*
+set      wildignore+=*.swp,*~,._*
+set      title
+set      splitright
+set      splitbelow
+set      shortmess+=I
+set      magic
+set      showmatch
+set      mat=2
+set      novisualbell
+set      regexpengine=0
+set      background=dark
+set      ffs=unix,dos,mac
+" Avoids swapfiles in current directory
+if &directory =~# '^\.,'
+  if !empty($HOME)
+    if has('win32')
+      let &directory = expand('$HOME/vimfiles') . '//,' . &directory
+    else
+      let &directory = expand('$HOME/.vim') . '//,' . &directory
+    endif
+  endif
+  if !empty($XDG_DATA_HOME)
+    let &directory = expand('$XDG_DATA_HOME') . '//,' . &directory
+  endif
+  if has('macunix')
+    let &directory = expand('$HOME/Library/Autosave Information') . '//,' . &directory
+  endif
+endif
 
+try
+    set undodir=~/.vim_runtime/temp_dirs/undodir
+    set undofile
+catch
+endtry
+
+vmap j gj
+vmap k gk
+nmap j gj
+nmap k gk
+
+map <C-j> <C-W>j
+map <C-k> <C-W>k
+map <C-h> <C-W>h
+map <C-l> <C-W>l
+
+nnoremap n nzz
+nnoremap N Nzz
+" Delete comment character when joining commented lines
+if v:version > 703 || v:version == 703 && has("patch541")
+  set formatoptions+=j
+endif
+
+if has('path_extra')
+  setglobal tags-=./tags tags-=./tags; tags^=./tags;
+endif
+
+if &t_Co == 8 && $TERM !~# '^Eterm'
+  set t_Co=16
+endif
+
+nnoremap & :&&<CR>
+xnoremap & :&&<CR>
+nnoremap Y y$
+
+let mapleader = "\<Space>"
 call plug#begin()
-Plug 'neoclide/coc.nvim', {'branch': 'release'}
-Plug 'rust-lang/rust.vim'
+Plug 'valloric/youcompleteme'
+" Plug 'rust-lang/rust.vim'
 Plug 'dense-analysis/ale'
 Plug 'romainl/vim-cool'
 Plug 'junegunn/vim-easy-align'
-Plug 'junegunn/seoul256.vim'
 Plug 'sainnhe/everforest'
 Plug 'preservim/nerdtree'
 Plug 'itchyny/lightline.vim'
@@ -35,37 +132,31 @@ Plug 'mattn/emmet-vim'
 Plug 'tpope/vim-surround'
 Plug 'tpope/vim-commentary'
 Plug 'ervandew/supertab'
-" Plug 'jiangmiao/auto-pairs' Use coc-pairs instead
-" Plug 'prabirshrestha/vim-lsp'
-" Plug 'mattn/vim-lsp-settings'
-" Plug 'prabirshrestha/asyncomplete.vim'
-" Plug 'prabirshrestha/asyncomplete-lsp.vim'
+" Plug 'racer-rust/vim-racer'
+Plug 'jiangmiao/auto-pairs'
 call plug#end()
 
-set laststatus=2
-" export TERM=xterm-256color
 if !has('gui_running')
    set t_Co=256
 endif
 if has("gui_running")
-  set guifont=Fira\ Mono\ Medium:h15
+  set guifont=FiraMono\ Nerd\ Font\ Mono\ Medium:h15
+  set t_Co=256
+  set guitablabel=%M\ %t
 endif
 nnoremap <C-t> :NERDTreeToggle<CR>
 xmap ga <Plug>(EasyAlign)
 nmap ga <Plug>(EasyAlign)
-inoremap <expr> <Tab>   pumvisible() ? "\<C-n>" : "\<Tab>"
-inoremap <expr> <S-Tab> pumvisible() ? "\<C-p>" : "\<S-Tab>"
-inoremap <expr> <cr>    pumvisible() ? asyncomplete#close_popup() : "\<cr>"
-inoremap <silent><expr> <Tab>
-      \ coc#pum#visible() ? coc#pum#next(1) :
-      \ CheckBackspace() ? "\<Tab>" :
-      \ coc#refresh()
-inoremap <expr><S-TAB> coc#pum#visible() ? coc#pum#prev(1) : "\<C-h>"
-inoremap <silent><expr> <CR> coc#pum#visible() ? coc#pum#confirm()
-                              \: "\<C-g>u\<CR>\<c-r>=coc#on_enter()\<CR>"
 
-function! CheckBackspace() abort
-  let col = col('.') - 1
-  return !col || getline('.')[col - 1]  =~# '\s'
-endfunction
+let g:ycm_rust_toolchain_root = "C:/Users/Vasilis/scoop/persist/rustup/.rustup/toolchains/"
+let g:ycm_language_server = 
+  \ [ 
+  \   {
+  \     'name': 'rust',
+  \     'cmdline': [ 'rust-analyzer' ],
+  \     'filetypes': [ 'rust' ],
+  \     'project_root_files': [ 'Cargo.toml' ]
+  \   }
+  \ ]
+
 silent! colorscheme everforest
