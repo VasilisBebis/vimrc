@@ -159,4 +159,19 @@ let g:ycm_language_server =
   \   }
   \ ]
 
+let g:ycm_auto_trigger = 1
+
+augroup MyYCMCustom
+  autocmd!
+  autocmd FileType c,cpp,rust let b:ycm_hover = {
+    \ 'command': 'GetDoc',
+    \ 'syntax': &filetype,
+    \ 'popup_params': {
+    \     'maxwidth': 80,
+    \     'border': [],
+    \     'borderchars': ['─', '│', '─', '│', '┌', '┐', '┘', '└'],
+    \   },
+    \ }
+augroup END
+
 silent! colorscheme everforest
