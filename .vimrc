@@ -133,6 +133,7 @@ Plug 'tpope/vim-surround'
 Plug 'tpope/vim-commentary'
 Plug 'ervandew/supertab'
 " Plug 'racer-rust/vim-racer'
+Plug 'fidian/hexmode'
 Plug 'jiangmiao/auto-pairs'
 call plug#end()
 
