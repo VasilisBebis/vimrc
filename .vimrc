@@ -9,6 +9,7 @@ filetype plugin on
 filetype indent on
 syntax   on
 syntax   enable
+set      completeopt-=preview
 set      autoindent
 set      nocompatible
 set      number
@@ -17,7 +18,7 @@ set      shiftwidth=2
 set      softtabstop=2
 set      expandtab
 set      wildmenu
-set      clipboard=unnamedplus
+" set      clipboard=unnamedplus
 set      signcolumn=yes
 set      noshowmode
 set      noruler
@@ -122,26 +123,24 @@ let mapleader = "\<Space>"
 call plug#begin()
 Plug 'valloric/youcompleteme'
 " Plug 'rust-lang/rust.vim'
-Plug 'dense-analysis/ale'
 Plug 'romainl/vim-cool'
 Plug 'junegunn/vim-easy-align'
-Plug 'sainnhe/everforest'
 Plug 'preservim/nerdtree'
 Plug 'itchyny/lightline.vim'
-Plug 'mattn/emmet-vim'
 Plug 'tpope/vim-surround'
 Plug 'tpope/vim-commentary'
 Plug 'ervandew/supertab'
 " Plug 'racer-rust/vim-racer'
 Plug 'fidian/hexmode'
 Plug 'jiangmiao/auto-pairs'
+Plug 'rose-pine/vim'
 call plug#end()
 
 if !has('gui_running')
    set t_Co=256
 endif
 if has("gui_running")
-  set guifont=FiraMono\ Nerd\ Font\ Mono\ Medium:h15
+  set guifont=Iosevka\ NFM\ Medium:h15
   set t_Co=256
   set guitablabel=%M\ %t
 endif
@@ -175,4 +174,8 @@ augroup MyYCMCustom
     \ }
 augroup END
 
-silent! colorscheme everforest
+let g:lightline = {
+      \ 'colorscheme': 'one',
+      \ }
+
+silent! colorscheme rosepine_moon
